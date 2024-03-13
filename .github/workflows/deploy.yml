@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 permissions:
   contents: write
 
+env:
+  NITRO_PRESET: github_pages
+
 on:
   workflow_dispatch:
   push:
@@ -20,7 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: latest
-      
+
       - name: Enable pnpm through corepack
         run: corepack enable pnpm
 
