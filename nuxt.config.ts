@@ -3,11 +3,5 @@ export default defineNuxtConfig({
   ssr: false,
   devtools: {
     enabled: false
-  },
-  app: {
-    baseURL: 'deaspegao-client'
-  },
-  nitro: {
-    baseURL: 'deaspegao-client'
   }
 });

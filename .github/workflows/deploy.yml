@@ -27,6 +27,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Set base URL
+        run: |
+          echo "NUXT_APP_BASE_URL=$(echo $GITHUB_REPOSITORY | cut -d "/" -f 2)" >> $GITHUB_ENV
+          echo "NITRO_APP_BASE_URL=$(echo $GITHUB_REPOSITORY | cut -d "/" -f 2)" >> $GITHUB_ENV
+
       - name: SSG
         run: pnpm run generate
 
