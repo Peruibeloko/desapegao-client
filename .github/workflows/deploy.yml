@@ -17,7 +17,9 @@ jobs:
           node-version: latest
       
       - name: Install pnpm
-        run: curl -fsSL https://get.pnpm.io/install.sh | bash
+        run: |
+          curl -fsSL https://get.pnpm.io/install.sh | bash
+          source /home/runner/.bashrc
 
       - name: Install dependencies
         run: pnpm install
