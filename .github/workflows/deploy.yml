@@ -9,21 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Setup Node
-      - uses: actions/setup-node@v4
+        uses: actions/setup-node@v4
         with:
           node-version: latest
       
       - name: Install pnpm
-      - run: curl -fsSL https://get.pnpm.io/install.sh | sh -
+        run: curl -fsSL https://get.pnpm.io/install.sh | sh -
 
       - name: Install dependencies
-      - run: pnpm install
+        run: pnpm install
 
       - name: SSG
-      - run: pnpm run generate
+        run: pnpm run generate
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.5.0
