@@ -1,44 +1,45 @@
 name: Deploy to GitHub Pages
-
-permissions:
-  contents: write
-
-env:
-  NITRO_PRESET: github_pages
-
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: latest
 
-      - name: Enable pnpm through corepack
+      - name: Enable pnpm using Corepack
         run: corepack enable pnpm
 
-      - name: Install dependencies
+      - name: Download dependencies
         run: pnpm install
 
-      - name: Set base URL
-        run: |
-          echo "NUXT_APP_BASE_URL=$(echo $GITHUB_REPOSITORY | cut -d "/" -f 2)" >> $GITHUB_ENV
-          echo "NITRO_APP_BASE_URL=$(echo $GITHUB_REPOSITORY | cut -d "/" -f 2)" >> $GITHUB_ENV
+      - name: Generate static site
+        run: pnpm run generate --preset github_pages
 
-      - name: SSG
-        run: pnpm run generate
-
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          folder: .output/public
+          path: ./.output/public
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
