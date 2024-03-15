@@ -5,9 +5,15 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@types/p5':
+    specifier: ^1.7.6
+    version: 1.7.6
   nuxt:
     specifier: ^3.10.3
     version: 3.10.3(sass@1.71.1)(vite@5.1.4)
+  p5:
+    specifier: ^1.9.1
+    version: 1.9.1
   vue:
     specifier: ^3.4.19
     version: 3.4.19
@@ -1713,6 +1719,10 @@ packages:
     resolution: {integrity: sha512-7/rR21OS+fq8IyHTgtLkDK949uzsa6n8BkziAKtPVpugIkO6D+/ooXMvzXxDnZrmtXVfjb1bKQafYpb8s89LOg==}
     dependencies:
       undici-types: 5.26.5
+    dev: false
+
+  /@types/p5@1.7.6:
+    resolution: {integrity: sha512-6pLTOo0V3N5jZb5nTwjiv3lPHLK3Z/TjbhQUj8CTWXocUk1Z/f6OHTp3Pcwi1BhWnf5gqKUcyEb1gP0KIJuQgw==}
     dev: false
 
   /@types/resolve@1.20.2:
@@ -4395,6 +4405,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       aggregate-error: 3.1.0
+    dev: false
+
+  /p5@1.9.1:
+    resolution: {integrity: sha512-TpuCll0KwyY8jyQbY9j4wCt+pA3Qv0egd4MqkrhJ58pBgdj5im5XsKpP/64gepDilJXTk126vWXiNAPeSezNdg==}
     dev: false
 
   /pacote@17.0.6:

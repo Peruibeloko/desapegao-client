@@ -20,6 +20,8 @@
 </template>
 
 <script setup lang="ts">
+const model = defineModel<string>();
+
 const fileInfo = ref({
   name: '',
   size: 0,
@@ -42,7 +44,7 @@ const formattedSize = computed(() => {
   }
 });
 
-const handleInput = async (e: Event) => {
+const handleInput = (e: Event) => {
   const selectedFile = (e.target as HTMLInputElement).files?.item(0);
 
   if (!selectedFile) {
@@ -56,6 +58,10 @@ const handleInput = async (e: Event) => {
 
     return;
   }
+
+  const reader = new FileReader();
+  reader.readAsDataURL(selectedFile);
+  reader.addEventListener('load', () => (model.value = reader.result as string));
 
   const img = new Image();
   img.src = URL.createObjectURL(selectedFile);
