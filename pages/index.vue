@@ -83,5 +83,22 @@ form {
     color: #949494;
     opacity: 1;
   }
+
+  button {
+    padding: 1rem 4rem;
+    margin-top: 2rem;
+    cursor: pointer;
+
+    border: none;
+    border-radius: 2rem;
+    background-color: var(--color__main);
+    color: white;
+
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+
+    box-shadow: 0 4px 4px hsla(0, 0%, 0%, 25%);
+  }
 }
 </style>

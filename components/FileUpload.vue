@@ -8,9 +8,9 @@
     required
   />
   <label for="productImage">
-    <div v-if="fileInfo.name">
-      <img :src="fileInfo.imageData" />
-      <span>{{ fileInfo.width }}x{{ fileInfo.height }}, {{ formattedSize }}</span>
+    <div v-if="fileSize !== 0">
+      <img ref="image" :src="model" />
+      <span>{{ image?.naturalWidth ?? 0 }}x{{ image?.naturalHeight ?? 0 }}, {{ formattedSize }}</span>
     </div>
     <div v-else>
       <i class="material-symbols-outlined">&#xF09B;</i>
@@ -21,26 +21,19 @@
 
 <script setup lang="ts">
 const model = defineModel<string>();
-
-const fileInfo = ref({
-  name: '',
-  size: 0,
-  imageData: '',
-  width: 0,
-  height: 0
-});
+const image = ref<HTMLImageElement>();
+const fileSize = ref(0);
 
 const formattedSize = computed(() => {
-  const fileSize = fileInfo.value.size;
   switch (true) {
-    case fileSize >= 1_000_000:
-      return `${(fileSize / 1_000_000).toFixed(2)}MB`;
+    case fileSize.value >= 1_000_000:
+      return `${(fileSize.value / 1_000_000).toFixed(2)}MB`;
 
-    case fileSize >= 1_000:
-      return `${(fileSize / 1_000).toFixed(2)}KB`;
+    case fileSize.value >= 1_000:
+      return `${(fileSize.value / 1_000).toFixed(2)}KB`;
 
     default:
-      return `${fileSize}B`;
+      return `${fileSize.value}B`;
   }
 });
 
@@ -48,31 +41,17 @@ const handleInput = (e: Event) => {
   const selectedFile = (e.target as HTMLInputElement).files?.item(0);
 
   if (!selectedFile) {
-    fileInfo.value = {
-      name: '',
-      size: 0,
-      imageData: '',
-      width: 0,
-      height: 0
-    };
-
+    fileSize.value = 0
     return;
   }
 
+  fileSize.value = selectedFile.size;
+
   const reader = new FileReader();
   reader.readAsDataURL(selectedFile);
-  reader.addEventListener('load', () => (model.value = reader.result as string));
-
-  const img = new Image();
-  img.src = URL.createObjectURL(selectedFile);
-
-  fileInfo.value = {
-    name: selectedFile.name,
-    size: selectedFile.size,
-    imageData: URL.createObjectURL(selectedFile),
-    width: img.width,
-    height: img.height
-  };
+  reader.addEventListener('load', () => {
+    model.value = reader.result as string;
+  });
 };
 </script>
 

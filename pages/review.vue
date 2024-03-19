@@ -23,6 +23,7 @@ main {
 button {
   padding: 1rem 4rem;
   
+  cursor: pointer;
   border: none;
   border-radius: 2rem;
   background-color: var(--color__main);

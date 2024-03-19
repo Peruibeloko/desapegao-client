@@ -12,6 +12,11 @@ const getFormattedQuality = ({ quality }: Listing) => {
   }[quality];
 };
 
+const getFontSize = (width: number, textLength: number) => {
+  const scaleFactor = 1.7; // relative to the font's aspect ratio, set to taste
+  return (width / textLength) * scaleFactor;
+};
+
 export default (getProduct: () => Listing, fontPath: string) => (p: p5) => {
   let img: p5.Image;
   let inter: p5.Font;
@@ -23,10 +28,10 @@ export default (getProduct: () => Listing, fontPath: string) => (p: p5) => {
   };
 
   p.setup = () => {
-    const SIZE = 286;
+    const SIZE = 500;
     const renderer = p.createCanvas(SIZE, SIZE);
 
-    const cropSize = 40;
+    const cropSize = 70;
     const availableHeight = p.height - 2 * cropSize;
 
     p.background('#D9D9D9');
@@ -38,25 +43,27 @@ export default (getProduct: () => Listing, fontPath: string) => (p: p5) => {
     p.rect(0, p.height - cropSize, p.width, cropSize);
 
     // Draw text
-    p.textAlign('center');
+    p.textAlign('center', 'center');
     p.textFont(inter);
     p.fill('#FFA100');
 
     const productData = getProduct();
 
-    p.textSize(16);
-    p.text(productData.productName, p.width / 2, cropSize / 2 - 5);
+    p.textSize(getFontSize(p.width * 0.8, productData.productName.length));
+    p.text(productData.productName, p.width / 2, cropSize / 2 - p.textSize() / 2);
 
-    p.textSize(14);
-    p.text(
-      `R$${productData.price.toFixed(2)} - ${getFormattedQuality(productData)} - ${productData.location}`,
-      p.width / 2,
-      cropSize - 5
-    );
+    const productDataString = `R$${productData.price.toFixed(2)} - ${getFormattedQuality(productData)} - ${
+      productData.location
+    }`;
+
+    p.textSize(getFontSize(p.width * 0.6, productDataString.length));
+    p.text(productDataString, p.width / 2, cropSize - p.textSize());
+
+    const sellerInfoString = `${productData.sellerName} - ${productData.sellerPhone}`;
 
     p.fill(255);
-    p.textSize(19);
-    p.text(`${productData.sellerName} - ${productData.sellerPhone}`, p.width / 2, p.height - 19 / 2 - 3);
+    p.textSize(getFontSize(p.width * 0.8, sellerInfoString.length));
+    p.text(sellerInfoString, p.width / 2, p.height - cropSize / 2 - 5);
 
     // Draw product image
     const aspectRatioImg = img.width / img.height;
