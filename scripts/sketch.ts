@@ -16,15 +16,25 @@ export default (getProduct: () => Listing) => (p: p5) => {
   let img: p5.Image;
 
   const getFontSize = ([hBound, vBound]: [number, number], text: string) => {
-    p.textSize(12);
-    const currentSize = 12;
+    p.textSize(vBound);
     const w = p.textWidth(text);
     const h = p.textAscent() + p.textDescent();
 
-    if (w < hBound) {
-      return currentSize / (w / hBound);
-    } else {
-      return currentSize / (h / vBound);
+    switch (true) {
+      case w > hBound:
+        console.log(text, 'w > hBound');
+
+        return p.textSize() * (hBound / w);
+      case h > vBound:
+        console.log(text, 'h > vBound');
+
+        return p.textSize() * (vBound / h);
+      case vBound > hBound:
+        console.log(text, 'vBound > hBound');
+
+        return p.textSize() / (hBound / w);
+      default:
+        return vBound;
     }
   };
 
@@ -66,7 +76,7 @@ export default (getProduct: () => Listing) => (p: p5) => {
     }`;
 
     p.textAlign('center', 'top');
-    p.textSize(getFontSize([p.width * 0.7, cropSize / 2], productDataString));
+    p.textSize(getFontSize([p.width * 0.8, cropSize / 2], productDataString));
     p.text(productDataString, p.width / 2, cropSize / 2 + 5);
 
     // Seller info

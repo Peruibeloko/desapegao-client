@@ -7,17 +7,33 @@ import sketchFactory from '@/scripts/sketch';
 import ListingSchema from '@/typings/Listing';
 import type { z } from 'zod';
 
+definePageMeta({
+  middleware: (to, from) => {
+    if (to.path !== 'review') {
+      return;
+    }
+
+    const listingData = localStorage.getItem('listing');
+
+    if (!listingData) {
+      return navigateTo('/');
+    }
+
+    const productData = JSON.parse(listingData as string) as z.infer<typeof ListingSchema>;
+
+    if (!productData.productImage) {
+      return navigateTo('/');
+    }
+  }
+});
+
+
 const p5Canvas = ref<HTMLElement>();
 const p5instance = ref<P5>();
-const sketch = sketchFactory(() => productData);
 
 const listingData = localStorage.getItem('listing');
-
-const router = useRouter();
-
-if (!listingData) router.push('/');
-
 const productData = JSON.parse(listingData as string) as z.infer<typeof ListingSchema>;
+const sketch = sketchFactory(() => productData);
 
 onMounted(() => {
   p5instance.value = new P5(sketch, p5Canvas.value);
