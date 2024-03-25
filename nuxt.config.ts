@@ -5,5 +5,10 @@ export default defineNuxtConfig({
   },
   devtools: {
     enabled: false
+  },
+  nitro: {
+    prerender: {
+      ignore: ['/review']
+    }
   }
 });
