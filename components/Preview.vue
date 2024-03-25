@@ -9,7 +9,7 @@ import type { z } from 'zod';
 
 const p5Canvas = ref<HTMLElement>();
 const p5instance = ref<P5>();
-const sketch = sketchFactory(() => productData, '/_nuxt/assets/fonts/Inter-Bold.ttf');
+const sketch = sketchFactory(() => productData);
 
 const listingData = localStorage.getItem('listing');
 

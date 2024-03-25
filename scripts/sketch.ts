@@ -12,19 +12,25 @@ const getFormattedQuality = ({ quality }: Listing) => {
   }[quality];
 };
 
-const getFontSize = (width: number, textLength: number) => {
-  const scaleFactor = 1.7; // relative to the font's aspect ratio, set to taste
-  return (width / textLength) * scaleFactor;
-};
-
-export default (getProduct: () => Listing, fontPath: string) => (p: p5) => {
+export default (getProduct: () => Listing) => (p: p5) => {
   let img: p5.Image;
-  let inter: p5.Font;
+
+  const getFontSize = ([hBound, vBound]: [number, number], text: string) => {
+    p.textSize(12);
+    const currentSize = 12;
+    const w = p.textWidth(text);
+    const h = p.textAscent() + p.textDescent();
+
+    if (w < hBound) {
+      return currentSize / (w / hBound);
+    } else {
+      return currentSize / (h / vBound);
+    }
+  };
 
   p.preload = () => {
     const imgUrl = getProduct().productImage;
     img = p.loadImage(imgUrl ?? '');
-    inter = p.loadFont(fontPath);
   };
 
   p.setup = () => {
@@ -42,28 +48,34 @@ export default (getProduct: () => Listing, fontPath: string) => (p: p5) => {
     p.rect(0, 0, p.width, cropSize);
     p.rect(0, p.height - cropSize, p.width, cropSize);
 
-    // Draw text
-    p.textAlign('center', 'center');
-    p.textFont(inter);
-    p.fill('#FFA100');
+    // Font
+    p.textFont('Inter');
+    p.textStyle('bold');
 
+    // Product name
     const productData = getProduct();
 
-    p.textSize(getFontSize(p.width * 0.8, productData.productName.length));
-    p.text(productData.productName, p.width / 2, cropSize / 2 - p.textSize() / 2);
+    p.textAlign('center', 'bottom');
+    p.fill('#FFA100');
+    p.textSize(getFontSize([p.width * 0.9, cropSize / 2], productData.productName));
+    p.text(productData.productName, p.width / 2, cropSize / 2 + 5);
 
+    // Product info
     const productDataString = `R$${productData.price.toFixed(2)} - ${getFormattedQuality(productData)} - ${
       productData.location
     }`;
 
-    p.textSize(getFontSize(p.width * 0.6, productDataString.length));
-    p.text(productDataString, p.width / 2, cropSize - p.textSize());
+    p.textAlign('center', 'top');
+    p.textSize(getFontSize([p.width * 0.7, cropSize / 2], productDataString));
+    p.text(productDataString, p.width / 2, cropSize / 2 + 5);
 
+    // Seller info
     const sellerInfoString = `${productData.sellerName} - ${productData.sellerPhone}`;
 
     p.fill(255);
-    p.textSize(getFontSize(p.width * 0.8, sellerInfoString.length));
-    p.text(sellerInfoString, p.width / 2, p.height - cropSize / 2 - 5);
+    p.textAlign('center', 'center');
+    p.textSize(getFontSize([p.width * 0.9, cropSize], sellerInfoString));
+    p.text(sellerInfoString, p.width / 2, p.height - cropSize / 2);
 
     // Draw product image
     const aspectRatioImg = img.width / img.height;
