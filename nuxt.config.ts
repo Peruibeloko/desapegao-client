@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   },
   nitro: {
     prerender: {
-      ignore: ['/review']
+      ignore: ['/review', '/error']
     }
   }
 });
