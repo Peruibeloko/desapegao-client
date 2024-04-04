@@ -71,7 +71,7 @@ export default (getProduct: () => Listing) => (p: p5) => {
     p.text(productData.productName, p.width / 2, cropSize / 2 + 5);
 
     // Product info
-    const productDataString = `R$${productData.price.toFixed(2)} - ${getFormattedQuality(productData)} - ${
+    const productDataString = `R$${productData.value.toFixed(2)} - ${getFormattedQuality(productData)} - ${
       productData.location
     }`;
 

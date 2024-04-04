@@ -10,7 +10,7 @@
       <option value="usadoFaltaPartes">Usado (Faltam partes/peças)</option>
       <option value="usadoQuebrado">Usado (Quebrado)</option>
     </select>
-    <input type="number" v-model="form.price" placeholder="Valor" required />
+    <input type="number" v-model="form.value" placeholder="Valor" required />
     <input type="text" v-model="form.location" placeholder="Bairro onde o produto se encontra" required />
     <input type="text" v-model="form.sellerName" placeholder="Seu nome" required />
     <input type="tel" v-model="form.sellerPhone" placeholder="Telefone" required />
@@ -31,7 +31,7 @@ const form = ref<Listing>({
   productImage: '',
   productName: '',
   quality: 'novo',
-  price: 0,
+  value: 0,
   location: '',
   sellerName: '',
   sellerPhone: ''
