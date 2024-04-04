@@ -16,13 +16,13 @@ onMounted(() => {
   error.value = sessionStorage.getItem('error') ?? error.value
 })
 </script>
-
 <style lang="scss" scoped>
 main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 3rem 3rem;
+  margin: 3rem auto;
+  width: fit-content;
 }
 
 span {
