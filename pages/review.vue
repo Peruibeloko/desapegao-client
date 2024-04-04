@@ -18,6 +18,9 @@ const handleClick = async () => {
 
   const result = await fetch('https://desapegao.deno.dev/listing/ftp', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: localStorage.getItem('listing')
   })
 
