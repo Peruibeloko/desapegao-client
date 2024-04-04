@@ -27,13 +27,18 @@ definePageMeta({
   }
 });
 
+interface Props {
+  setImage: (img: string) => void
+}
+
+const { setImage } = defineProps<Props>()
 
 const p5Canvas = ref<HTMLElement>();
 const p5instance = ref<P5>();
 
 const listingData = localStorage.getItem('listing');
 const productData = JSON.parse(listingData as string) as z.infer<typeof ListingSchema>;
-const sketch = sketchFactory(() => productData);
+const sketch = sketchFactory(() => productData, setImage);
 
 onMounted(() => {
   p5instance.value = new P5(sketch, p5Canvas.value);

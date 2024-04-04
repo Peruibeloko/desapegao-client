@@ -1,12 +1,12 @@
 <template>
   <main>
-    <Preview />
+    <Preview :setImage="setImage" />
     <span v-if="sending">Enviando seu anúncio, aguarde{{ ellipsis }}</span>
     <button v-else type="button" @click="handleClick">Tudo certo!</button>
   </main>
 </template>
 <script setup lang="ts">
-import type { Listing } from '~/typings/Listing';
+import type { Listing, ProvidedListing } from '~/typings/Listing';
 
 definePageMeta({
   headerText: 'Confira se o seu anúncio está correto'
@@ -15,12 +15,16 @@ definePageMeta({
 const router = useRouter();
 const sending = ref(false);
 
+const { listing, updateListing } = inject('listing') as ProvidedListing
+const image = ref('')
+const setImage = (img: string) => image.value = img
+
 const handleClick = async () => {
   sending.value = true;
 
   const payload: Listing = {
-    ...JSON.parse(localStorage.getItem('listing') ?? ''),
-    productImage: localStorage.getItem('listingImage')
+    ...listing.value,
+    productImage: image.value
   }
   const result = await fetch('https://desapegao.deno.dev/listing/ftp', {
     method: 'POST',
@@ -33,13 +37,13 @@ const handleClick = async () => {
   if (result.status !== 200) {
     sessionStorage.setItem('error', await result.text())
     router.push('error');
-    return
+    return true;
   }
 
   localStorage.removeItem('listing')
   localStorage.removeItem('listingImage')
   router.push('finish');
-  return
+  return true;
 }
 
 const ellipsis = ref('.');
@@ -61,7 +65,8 @@ main {
   gap: 2rem;
 }
 
-button, span {
+button,
+span {
   padding: 1rem 4rem;
 
   cursor: pointer;

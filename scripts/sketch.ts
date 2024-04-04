@@ -12,7 +12,7 @@ const getFormattedQuality = ({ quality }: Listing) => {
   }[quality];
 };
 
-export default (getProduct: () => Listing) => (p: p5) => {
+export default (getProduct: () => Listing, setImage: (img: string) => void) => (p: p5) => {
   let img: p5.Image;
 
   const getFontSize = ([hBound, vBound]: [number, number], text: string) => {
@@ -99,13 +99,8 @@ export default (getProduct: () => Listing) => (p: p5) => {
       p.image(img, x, y, width, height);
     }
 
-    (renderer.elt as HTMLCanvasElement).toBlob(blob => {
-      if (!blob) return;
-      blob
-        .text()
-        .then(btoa)
-        .then(b64Img => localStorage.setItem('listingImage', b64Img));
-    });
+    const imgData = (renderer.elt as HTMLCanvasElement).toDataURL();
+    setImage(imgData);
   };
 
   p.draw = () => {};

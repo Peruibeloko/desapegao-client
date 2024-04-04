@@ -10,5 +10,10 @@ const ListingSchema = z.object({
   sellerPhone: z.string()
 });
 
-export type Listing = z.infer<typeof ListingSchema>
-export default ListingSchema
+export type Listing = z.infer<typeof ListingSchema>;
+export type ProvidedListing = {
+  listing: Ref<Listing>;
+  updateListing: (k: keyof Listing, v: Listing[typeof k]) => void;
+  setListing: (v: Listing) => void
+};
+export default ListingSchema;

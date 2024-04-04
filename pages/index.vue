@@ -17,41 +17,27 @@
     <button type="submit">Enviar Anúncio</button>
   </form>
 </template>
-
 <script setup lang="ts">
-import type { Listing } from '@/typings/Listing';
+import type { Listing, ProvidedListing } from '@/typings/Listing';
 
 definePageMeta({
   headerText: 'Faça o envio do seu anúncio abaixo'
 });
 
 const router = useRouter();
+const { listing, setListing } = inject('listing') as ProvidedListing
 
 const form = ref<Listing>({
-  productImage: '',
-  productName: '',
-  quality: 'novo',
-  value: 0,
-  location: '',
-  sellerName: '',
-  sellerPhone: ''
-});
-
-onMounted(() => {
-  const formData = localStorage.getItem('listing');
-
-  if (!formData) return;
-
-  form.value = JSON.parse(formData);
+  ...listing.value
 });
 
 const handleSubmit = (e: Event) => {
   e.preventDefault();
   localStorage.setItem('listing', JSON.stringify(form.value));
+  setListing(form.value)
   router.push('review');
 };
 </script>
-
 <style scoped lang="scss">
 form {
   display: flex;

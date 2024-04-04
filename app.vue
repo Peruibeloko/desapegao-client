@@ -1,33 +1,62 @@
 <template>
   <header>
     <img src="./assets/images/Logo.png" alt="Logo do site" />
-    <span>
-      {{ route.meta.headerText ?? '' }}
-    </span>
+    <span> {{ route.meta.headerText ?? '' }} </span>
   </header>
   <main>
     <NuxtPage />
   </main>
 </template>
-
 <script setup lang="ts">
 import '../assets/styles/theme.scss';
+import type { Listing } from './typings/Listing';
+
+onMounted(() => {
+  const persistedData = localStorage.getItem('listing');
+
+  if (!persistedData) return;
+
+  listing.value = JSON.parse(persistedData);
+});
 
 const route = useRoute();
-</script>
+const listing = ref<Listing>({
+  productImage: '',
+  productName: '',
+  quality: 'novo',
+  value: 0,
+  location: '',
+  sellerName: '',
+  sellerPhone: ''
+})
 
+const updateListing = (k: keyof Listing, v: Listing[typeof k]) => {
+  listing.value = {
+    ...listing.value,
+    [k]: v
+  }
+}
+
+const setListing = (v: Listing) => listing.value = v
+
+provide('listing', {
+  listing,
+  updateListing,
+  setListing
+})
+</script>
 <style lang="scss">
 header {
   display: flex;
   flex-direction: column;
 }
 
-header > img {
+header>img {
   width: 80px;
   padding: 1rem;
 }
 
-header > span {
+header>span {
   padding: 0.75rem 0;
 
   background-color: var(--color__main);
