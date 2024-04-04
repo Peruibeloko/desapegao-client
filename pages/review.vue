@@ -25,7 +25,7 @@ const handleClick = async () => {
   })
 
   if (result.status !== 200) {
-    sessionStorage.setItem('error', result.statusText)
+    sessionStorage.setItem('error', await result.text())
     router.push('error');
     return true
   }
