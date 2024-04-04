@@ -22,16 +22,10 @@ export default (getProduct: () => Listing) => (p: p5) => {
 
     switch (true) {
       case w > hBound:
-        console.log(text, 'w > hBound');
-
         return p.textSize() * (hBound / w);
       case h > vBound:
-        console.log(text, 'h > vBound');
-
         return p.textSize() * (vBound / h);
       case vBound > hBound:
-        console.log(text, 'vBound > hBound');
-
         return p.textSize() / (hBound / w);
       default:
         return vBound;
@@ -107,6 +101,10 @@ export default (getProduct: () => Listing) => (p: p5) => {
 
     (renderer.elt as HTMLCanvasElement).toBlob(blob => {
       if (!blob) return;
+      blob.arrayBuffer().then(ab => {
+        const b64 = Buffer.from(ab).toString('base64');
+        localStorage.setItem('listingImage', b64);
+      });
     });
   };
 

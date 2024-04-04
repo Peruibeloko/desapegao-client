@@ -6,6 +6,8 @@
   </main>
 </template>
 <script setup lang="ts">
+import type { Listing } from '~/typings/Listing';
+
 definePageMeta({
   headerText: 'Confira se o seu anúncio está correto'
 });
@@ -16,22 +18,28 @@ const sending = ref(false);
 const handleClick = async () => {
   sending.value = true;
 
+  const payload: Listing = {
+    ...JSON.parse(localStorage.getItem('listing') ?? ''),
+    productImage: localStorage.getItem('listingImage')
+  }
   const result = await fetch('https://desapegao.deno.dev/listing/ftp', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: localStorage.getItem('listing')
+    body: JSON.stringify(payload)
   })
 
   if (result.status !== 200) {
     sessionStorage.setItem('error', await result.text())
     router.push('error');
-    return true
+    return
   }
 
+  localStorage.removeItem('listing')
+  localStorage.removeItem('listingImage')
   router.push('finish');
-  return true
+  return
 }
 
 const ellipsis = ref('.');
@@ -53,7 +61,7 @@ main {
   gap: 2rem;
 }
 
-button {
+button, span {
   padding: 1rem 4rem;
 
   cursor: pointer;
