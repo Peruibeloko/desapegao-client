@@ -101,10 +101,10 @@ export default (getProduct: () => Listing) => (p: p5) => {
 
     (renderer.elt as HTMLCanvasElement).toBlob(blob => {
       if (!blob) return;
-      blob.arrayBuffer().then(ab => {
-        const b64 = Buffer.from(ab).toString('base64');
-        localStorage.setItem('listingImage', b64);
-      });
+      blob
+        .text()
+        .then(btoa)
+        .then(b64Img => localStorage.setItem('listingImage', b64Img));
     });
   };
 
