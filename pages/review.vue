@@ -16,7 +16,7 @@ const sending = ref(false);
 const handleClick = async () => {
   sending.value = true;
 
-  const result = await fetch(`${process.env.BACKEND_URL}/listing/ftp`, {
+  const result = await fetch('https://desapegao.deno.dev/listing/ftp', {
     method: 'POST',
     body: localStorage.getItem('listing')
   })
