@@ -48,3 +48,13 @@ onUnmounted(() => {
   p5instance.value?.remove();
 });
 </script>
+<style scoped lang="scss">
+div {
+  max-width: 90%;
+  margin: 0 auto;
+
+  :deep(canvas) {
+    max-width: 100%;
+  }
+}
+</style>
