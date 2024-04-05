@@ -64,10 +64,11 @@ export default (getProduct: () => Listing, setImage: (img: string) => void) => (
     p.textSize(getFontSize([p.width * 0.9, cropSize / 2], productData.productName));
     p.text(productData.productName, p.width / 2, cropSize / 2 + 5);
 
+    const formattedPrice = Intl.NumberFormat('pt-BR', { currency: 'BRL', style: 'currency' }).format(
+      +productData.value
+    )
     // Product info
-    const productDataString = `R$${productData.value.toFixed(2)} - ${getFormattedQuality(productData)} - ${
-      productData.location
-    }`;
+    const productDataString = `${formattedPrice} - ${getFormattedQuality(productData)} - ${productData.location}`;
 
     p.textAlign('center', 'top');
     p.textSize(getFontSize([p.width * 0.8, cropSize / 2], productDataString));

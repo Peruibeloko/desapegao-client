@@ -15,7 +15,7 @@ definePageMeta({
 const router = useRouter();
 const sending = ref(false);
 
-const { listing, updateListing } = inject('listing') as ProvidedListing
+const { listing, setListing } = inject('listing') as ProvidedListing
 const image = ref('')
 const setImage = (img: string) => image.value = img
 
@@ -26,6 +26,7 @@ const handleClick = async () => {
     ...listing.value,
     productImage: image.value
   }
+
   const result = await fetch('https://desapegao.deno.dev/listing/ftp', {
     method: 'POST',
     headers: {
@@ -37,13 +38,19 @@ const handleClick = async () => {
   if (result.status !== 200) {
     sessionStorage.setItem('error', await result.text())
     router.push('error');
-    return true;
   }
 
   localStorage.removeItem('listing')
-  localStorage.removeItem('listingImage')
+  setListing({
+    location: '',
+    productImage: '',
+    productName: '',
+    quality: 'novo',
+    sellerName: '',
+    sellerPhone: '',
+    value: ''
+  })
   router.push('finish');
-  return true;
 }
 
 const ellipsis = ref('.');

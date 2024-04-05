@@ -1,8 +1,8 @@
 <template>
   <form @submit="handleSubmit">
-    <FileUpload v-model="form.productImage" />
-    <input type="text" v-model="form.productName" placeholder="Nome e marca do produto" required />
-    <select v-model="form.quality" placeholder="Estado do produto" required>
+    <FileUpload v-model="listing.productImage" />
+    <input type="text" v-model.trim="listing.productName" placeholder="Nome e marca do produto" required />
+    <select v-model="listing.quality" placeholder="Estado do produto" required>
       <option value="novo">Novo</option>
       <option value="semiNovo">Semi-novo</option>
       <option value="usadoBoaCondicao">Usado (Boa condição)</option>
@@ -10,10 +10,10 @@
       <option value="usadoFaltaPartes">Usado (Faltam partes/peças)</option>
       <option value="usadoQuebrado">Usado (Quebrado)</option>
     </select>
-    <input type="number" v-model="form.value" placeholder="Valor" required />
-    <input type="text" v-model="form.location" placeholder="Bairro onde o produto se encontra" required />
-    <input type="text" v-model="form.sellerName" placeholder="Seu nome" required />
-    <input type="tel" v-model="form.sellerPhone" placeholder="Telefone" required />
+    <PriceInput v-model="listing.value" />
+    <input type="text" v-model.trim="listing.location" placeholder="Bairro onde o produto se encontra" required />
+    <input type="text" v-model.trim="listing.sellerName" placeholder="Seu nome" required />
+    <PhoneInput v-model="listing.sellerPhone" />
     <button type="submit">Enviar Anúncio</button>
   </form>
 </template>
@@ -25,16 +25,19 @@ definePageMeta({
 });
 
 const router = useRouter();
-const { listing, setListing } = inject('listing') as ProvidedListing
-
-const form = ref<Listing>({
-  ...listing.value
-});
+const { listing, setListing } = inject('listing') as ProvidedListing;
 
 const handleSubmit = (e: Event) => {
   e.preventDefault();
-  localStorage.setItem('listing', JSON.stringify(form.value));
-  setListing(form.value)
+  localStorage.setItem(
+    'listing',
+    JSON.stringify({
+      ...listing.value,
+      value: listing.value.value.replaceAll(/\D/g, ''),
+      sellerPhone: listing.value.sellerPhone.replaceAll(/\D/g, '')
+    } as Listing)
+  );
+  setListing(listing.value);
   router.push('review');
 };
 </script>
@@ -52,7 +55,7 @@ form {
   select {
     background-color: transparent;
     border: none;
-    color: #949494;
+    // color: #949494;
   }
 
   input,

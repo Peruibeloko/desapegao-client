@@ -1,12 +1,7 @@
 <template>
-
-  <Head>
-    <title>Desapegão</title>
-    <link rel="shortcut icon" :href="favicon" type="image/x-icon">
-  </Head>
   <header>
     <NuxtLink to="/">
-      <img src="./assets/images/Logo.png" alt="Logo do site" />
+      <img src="~/assets/images/Logo.png" alt="Logo do site" />
     </NuxtLink>
     <span> {{ route.meta.headerText ?? '' }} </span>
   </header>
@@ -15,8 +10,6 @@
   </main>
 </template>
 <script setup lang="ts">
-///@ts-expect-error
-import favicon from './assets/images/favicon.ico'
 import '../assets/styles/theme.scss';
 import type { Listing } from './typings/Listing';
 
@@ -33,7 +26,7 @@ const listing = ref<Listing>({
   productImage: '',
   productName: '',
   quality: 'novo',
-  value: 0,
+  value: '',
   location: '',
   sellerName: '',
   sellerPhone: ''
