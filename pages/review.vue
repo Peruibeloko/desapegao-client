@@ -15,9 +15,9 @@ definePageMeta({
 const router = useRouter();
 const sending = ref(false);
 
-const { listing, setListing } = inject('listing') as ProvidedListing
-const image = ref('')
-const setImage = (img: string) => image.value = img
+const { listing, setListing } = inject('listing') as ProvidedListing;
+const image = ref('');
+const setImage = (img: string) => (image.value = img);
 
 const handleClick = async () => {
   sending.value = true;
@@ -25,7 +25,7 @@ const handleClick = async () => {
   const payload: Listing = {
     ...listing.value,
     productImage: image.value
-  }
+  };
 
   const result = await fetch('https://desapegao.deno.dev/listing/ftp', {
     method: 'POST',
@@ -33,14 +33,14 @@ const handleClick = async () => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(payload)
-  })
+  });
 
   if (result.status !== 200) {
-    sessionStorage.setItem('error', await result.text())
-    router.push('error');
+    sessionStorage.setItem('error', await result.text());
+    return router.push('error');
   }
 
-  localStorage.removeItem('listing')
+  localStorage.removeItem('listing');
   setListing({
     location: '',
     productImage: '',
@@ -49,17 +49,17 @@ const handleClick = async () => {
     sellerName: '',
     sellerPhone: '',
     value: ''
-  })
+  });
   router.push('finish');
-}
+};
 
 const ellipsis = ref('.');
 setInterval(() => {
-  const currLen = ellipsis.value.length
+  const currLen = ellipsis.value.length;
   if (currLen === 3) {
-    ellipsis.value = '.'
+    ellipsis.value = '.';
   } else {
-    ellipsis.value = '.'.repeat(currLen + 1)
+    ellipsis.value = '.'.repeat(currLen + 1);
   }
 }, 200);
 </script>
