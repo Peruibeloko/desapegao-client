@@ -29,15 +29,15 @@ const { listing, setListing } = inject('listing') as ProvidedListing;
 
 const handleSubmit = (e: Event) => {
   e.preventDefault();
-  localStorage.setItem(
-    'listing',
-    JSON.stringify({
-      ...listing.value,
-      value: listing.value.value.replaceAll(/\D/g, ''),
-      sellerPhone: listing.value.sellerPhone.replaceAll(/\D/g, '')
-    } as Listing)
-  );
-  setListing(listing.value);
+
+  const fixedListing = {
+    ...listing.value,
+    value: listing.value.value.replaceAll(/\D/g, ''),
+    sellerPhone: listing.value.sellerPhone.replaceAll(/\D/g, '')
+  };
+
+  localStorage.setItem('listing', JSON.stringify(fixedListing));
+  setListing(fixedListing);
   router.push('review');
 };
 </script>
