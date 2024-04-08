@@ -2,7 +2,7 @@
   <main>
     <Preview :setImage="setImage" />
     <span v-if="sending">Enviando seu anúncio, aguarde{{ ellipsis }}</span>
-    <button v-else type="button" @click="handleClick">Tudo certo!</button>
+    <button v-else type="button" @click="handleClick" :disabled="!image">{{!image ? `Carregando prévia${ellipsis}` : "Tudo certo!"}}</button>
   </main>
 </template>
 <script setup lang="ts">
@@ -81,11 +81,16 @@ span {
   border-radius: 2rem;
   background-color: var(--color__main);
   color: white;
-
+  
   font-family: 'Inter', sans-serif;
   font-weight: bold;
   font-size: 16px;
-
+  
   box-shadow: 0 4px 4px hsla(0, 0%, 0%, 25%);
+}
+
+button:disabled {
+  background-color: hsl(0, 0%, 33%);
+  cursor: not-allowed;
 }
 </style>
