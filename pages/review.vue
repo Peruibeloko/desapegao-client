@@ -1,38 +1,44 @@
 <template>
   <main>
-    <Preview :setImage="setImage" />
+    <Preview />
     <span v-if="sending">Enviando seu anúncio, aguarde{{ ellipsis }}</span>
     <button v-else type="button" @click="handleClick">Tudo certo!</button>
   </main>
 </template>
 <script setup lang="ts">
-import type { Listing, ProvidedListing } from '~/typings/Listing';
+import type { Listing } from '~/typings/Listing';
 
 definePageMeta({
-  headerText: 'Confira se o seu anúncio está correto'
+  headerText: 'Confira se o seu anúncio está correto',
+  middleware: (to, _) => {
+    if (to.path !== 'review') {
+      return;
+    }
+
+    if (!images.productPhoto) {
+      return navigateTo('/');
+    }
+  }
 });
 
 const router = useRouter();
 const sending = ref(false);
 
-const { listing, setListing } = inject('listing') as ProvidedListing;
-const image = ref('');
-const setImage = (img: string) => (image.value = img);
+const listing = useListing();
+const images = useImages();
 
 const handleClick = async () => {
   sending.value = true;
-
-  const payload: Listing = {
-    ...listing.value,
-    productImage: image.value
-  };
 
   const result = await fetch('https://desapegao.deno.dev/listing/ftp', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify({
+      ...listing.asObject(),
+      listingImage: images.listingImage
+    })
   });
 
   if (result.status !== 200) {
@@ -41,26 +47,15 @@ const handleClick = async () => {
   }
 
   localStorage.removeItem('listing');
-  setListing({
-    location: '',
-    productImage: '',
-    productName: '',
-    quality: 'novo',
-    sellerName: '',
-    sellerPhone: '',
-    value: ''
-  });
+  listing.reset();
+  images.clear();
   router.push('finish');
 };
 
 const ellipsis = ref('.');
 setInterval(() => {
   const currLen = ellipsis.value.length;
-  if (currLen === 3) {
-    ellipsis.value = '.';
-  } else {
-    ellipsis.value = '.'.repeat(currLen + 1);
-  }
+  ellipsis.value = currLen === 3 ? '.' : '.'.repeat(currLen + 1);
 }, 200);
 </script>
 <style scoped lang="scss">

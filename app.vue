@@ -11,41 +11,18 @@
 </template>
 <script setup lang="ts">
 import '../assets/styles/theme.scss';
-import type { Listing } from './typings/Listing';
+import { useListing } from './stores/listing';
+
+const route = useRoute();
+const listing = useListing();
 
 onMounted(() => {
   const persistedData = localStorage.getItem('listing');
 
   if (!persistedData) return;
 
-  listing.value = JSON.parse(persistedData);
+  listing.init(JSON.parse(persistedData));
 });
-
-const route = useRoute();
-const listing = ref<Listing>({
-  productImage: '',
-  productName: '',
-  quality: 'novo',
-  value: '',
-  location: '',
-  sellerName: '',
-  sellerPhone: ''
-})
-
-const updateListing = (k: keyof Listing, v: Listing[typeof k]) => {
-  listing.value = {
-    ...listing.value,
-    [k]: v
-  }
-}
-
-const setListing = (v: Listing) => listing.value = v
-
-provide('listing', {
-  listing,
-  updateListing,
-  setListing
-})
 </script>
 <style lang="scss">
 header {
@@ -53,12 +30,12 @@ header {
   flex-direction: column;
 }
 
-header>a>img {
+header > a > img {
   width: 80px;
   padding: 1rem;
 }
 
-header>span {
+header > span {
   padding: 0.75rem 0;
 
   background-color: var(--color__main);
