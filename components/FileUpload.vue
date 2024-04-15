@@ -26,11 +26,13 @@ const images = useImages();
 const preview = ref<HTMLImageElement>();
 const fileSize = ref(0);
 
-const formattedSize = computed(() => {
-  if (fileSize.value >= 1_000_000) return `${(fileSize.value / 1_000_000).toFixed(2)}MB`;
-  if (fileSize.value >= 1_000) return `${(fileSize.value / 1_000).toFixed(2)}KB`;
-  return `${fileSize.value}B`;
-});
+const formatFileSize = (fileSize: number) => {
+  if (fileSize >= 1_000_000) return `${(fileSize / 1_000_000).toFixed(2)}MB`;
+  if (fileSize >= 1_000) return `${(fileSize / 1_000).toFixed(2)}KB`;
+  return `${fileSize}B`;
+};
+
+const formattedSize = computed(() => formatFileSize(fileSize.value));
 
 const dimensions = computed(() => {
   if (!preview.value) return { x: 0, y: 0 };
@@ -41,7 +43,10 @@ const setImage = (img: File) => {
   const reader = new FileReader();
   reader.readAsDataURL(img);
   reader.addEventListener('load', () => {
-    images.productPhoto = reader.result as string;
+    const result = reader.result as string;
+    images.productPhoto = result;
+
+    const blob = new Blob([result], { type: 'image/png' });
   });
 };
 
@@ -57,6 +62,8 @@ const handleInput = (e: Event) => {
 
   new Compressor(selectedFile, {
     quality: 0.6,
+    strict: true,
+    convertSize: -Infinity,
     success: setImage
   });
 };
