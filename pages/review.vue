@@ -2,12 +2,10 @@
   <main>
     <Preview />
     <span v-if="sending">Enviando seu anúncio, aguarde{{ ellipsis }}</span>
-    <button v-else type="button" @click="handleClick" :disabled="!image">{{!image ? `Carregando prévia${ellipsis}` : "Tudo certo!"}}</button>
+    <button v-else type="button" @click="handleClick" :disabled="!images.listingImage">{{!images.listingImage ? `Carregando prévia${ellipsis}` : "Tudo certo!"}}</button>
   </main>
 </template>
 <script setup lang="ts">
-import type { Listing } from '~/typings/Listing';
-
 definePageMeta({
   headerText: 'Confira se o seu anúncio está correto',
   middleware: (to, _) => {
