@@ -2,7 +2,7 @@
   <main>
     <p>Seu anúncio foi enviado com sucesso!</p>
     <!-- <p>Aguarde 24h para enviar seu próximo anúncio</p> -->
-    <NuxtLink to="/">Voltar ao início</NuxtLink>
+    <NuxtLink class="footer-link" to="/">Voltar ao início</NuxtLink>
   </main>
 </template>
 <script setup lang="ts">
@@ -28,22 +28,5 @@ p {
   font-family: 'Inter';
   text-align: center;
   font-weight: bold;
-}
-
-a {
-  padding: 1rem 4rem;
-  text-decoration: none;
-  cursor: pointer;
-
-  border: none;
-  border-radius: 2rem;
-  background-color: var(--color__main);
-  color: white;
-
-  font-family: 'Inter', sans-serif;
-  font-weight: bold;
-  font-size: 16px;
-
-  box-shadow: 0 4px 4px hsla(0, 0%, 0%, 25%);
 }
 </style>

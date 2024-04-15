@@ -1,16 +1,16 @@
 <template>
   <input
     type="file"
-    name="productImage"
-    id="productImage"
+    name="productPhoto"
+    id="productPhoto"
     accept="image/png, image/jpeg"
     @change="handleInput"
     required
   />
-  <label for="productImage">
+  <label for="productPhoto">
     <div v-if="fileSize !== 0">
-      <img ref="image" :src="model" />
-      <span>{{ image?.naturalWidth ?? 0 }}x{{ image?.naturalHeight ?? 0 }}, {{ formattedSize }}</span>
+      <img ref="preview" :src="images.productPhoto" />
+      <span>{{ dimensions.x }}x{{ dimensions.y }}, {{ formattedSize }}</span>
     </div>
     <div v-else>
       <i class="material-symbols-outlined">&#xF09B;</i>
@@ -20,37 +20,51 @@
 </template>
 
 <script setup lang="ts">
-const model = defineModel<string>();
-const image = ref<HTMLImageElement>();
+import Compressor from 'compressorjs';
+
+const images = useImages();
+const preview = ref<HTMLImageElement>();
 const fileSize = ref(0);
 
-const formattedSize = computed(() => {
-  switch (true) {
-    case fileSize.value >= 1_000_000:
-      return `${(fileSize.value / 1_000_000).toFixed(2)}MB`;
+const formatFileSize = (fileSize: number) => {
+  if (fileSize >= 1_000_000) return `${(fileSize / 1_000_000).toFixed(2)}MB`;
+  if (fileSize >= 1_000) return `${(fileSize / 1_000).toFixed(2)}KB`;
+  return `${fileSize}B`;
+};
 
-    case fileSize.value >= 1_000:
-      return `${(fileSize.value / 1_000).toFixed(2)}KB`;
+const formattedSize = computed(() => formatFileSize(fileSize.value));
 
-    default:
-      return `${fileSize.value}B`;
-  }
+const dimensions = computed(() => {
+  if (!preview.value) return { x: 0, y: 0 };
+  return { x: preview.value.naturalWidth, y: preview.value.naturalHeight };
 });
+
+const setImage = (img: File) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(img);
+  reader.addEventListener('load', () => {
+    const result = reader.result as string;
+    images.productPhoto = result;
+
+    const blob = new Blob([result], { type: 'image/png' });
+  });
+};
 
 const handleInput = (e: Event) => {
   const selectedFile = (e.target as HTMLInputElement).files?.item(0);
 
   if (!selectedFile) {
-    fileSize.value = 0
+    fileSize.value = 0;
     return;
   }
 
   fileSize.value = selectedFile.size;
 
-  const reader = new FileReader();
-  reader.readAsDataURL(selectedFile);
-  reader.addEventListener('load', () => {
-    model.value = reader.result as string;
+  new Compressor(selectedFile, {
+    quality: 0.6,
+    strict: true,
+    convertSize: -Infinity,
+    success: setImage
   });
 };
 </script>

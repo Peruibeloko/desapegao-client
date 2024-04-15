@@ -12,7 +12,7 @@ const getFormattedQuality = ({ quality }: Listing) => {
   }[quality];
 };
 
-export default (getProduct: () => Listing, setImage: (img: string) => void) => (p: p5) => {
+export default (getListing: () => Listing, getImage: () => string, setImage: (img: string) => void) => (p: p5) => {
   let img: p5.Image;
 
   const getFontSize = ([hBound, vBound]: [number, number], text: string) => {
@@ -33,8 +33,8 @@ export default (getProduct: () => Listing, setImage: (img: string) => void) => (
   };
 
   p.preload = () => {
-    const imgUrl = getProduct().productImage;
-    img = p.loadImage(imgUrl ?? '');
+    const imgData = getImage();
+    img = p.loadImage(imgData ?? '');
   };
 
   p.setup = () => {
@@ -57,25 +57,25 @@ export default (getProduct: () => Listing, setImage: (img: string) => void) => (
     p.textStyle('bold');
 
     // Product name
-    const productData = getProduct();
+    const listing = getListing();
 
     p.textAlign('center', 'bottom');
     p.fill('#FFA100');
-    p.textSize(getFontSize([p.width * 0.9, cropSize / 2], productData.productName));
-    p.text(productData.productName, p.width / 2, cropSize / 2 + 5);
+    p.textSize(getFontSize([p.width * 0.9, cropSize / 2], listing.productName));
+    p.text(listing.productName, p.width / 2, cropSize / 2 + 5);
 
     const formattedPrice = Intl.NumberFormat('pt-BR', { currency: 'BRL', style: 'currency' }).format(
-      +productData.value
-    )
+      +listing.value
+    );
     // Product info
-    const productDataString = `${formattedPrice} - ${getFormattedQuality(productData)} - ${productData.location}`;
+    const productDataString = `${formattedPrice} - ${getFormattedQuality(listing)} - ${listing.location}`;
 
     p.textAlign('center', 'top');
     p.textSize(getFontSize([p.width * 0.8, cropSize / 2], productDataString));
     p.text(productDataString, p.width / 2, cropSize / 2 + 5);
 
     // Seller info
-    const sellerInfoString = `${productData.sellerName} - ${productData.sellerPhone}`;
+    const sellerInfoString = `${listing.sellerName} - ${listing.sellerPhone}`;
 
     p.fill(255);
     p.textAlign('center', 'center');
