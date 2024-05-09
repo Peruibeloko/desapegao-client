@@ -9,6 +9,16 @@ export const useListing = defineStore('listing', () => {
   const sellerName = ref('');
   const sellerPhone = ref('');
 
+  const isFormValid = computed(
+    () =>
+      productName.value !== '' &&
+      value.value !== '' &&
+      location.value !== '' &&
+      sellerName.value !== '' &&
+      sellerPhone.value !== '' &&
+      sellerPhone.value.length === 11
+  );
+
   function init(data: Listing) {
     productName.value = data.productName;
     quality.value = data.quality;
@@ -49,6 +59,7 @@ export const useListing = defineStore('listing', () => {
     location,
     sellerName,
     sellerPhone,
+    isFormValid,
     init,
     reset,
     asObject,

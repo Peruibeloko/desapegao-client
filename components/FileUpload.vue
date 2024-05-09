@@ -74,6 +74,12 @@ input {
   display: none;
 }
 
+input:invalid + label div {
+  border-color: hsl(0, 60%, 50%);
+  color: hsl(0, 60%, 50%);
+  background-color: hsl(0, 100%, 85%);
+}
+
 label {
   width: 70%;
 }

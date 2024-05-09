@@ -1,5 +1,13 @@
 <template>
-  <input type="tel" placeholder="Valor em reais" :value="internal" v-maska:[options] required />
+  <input
+    inputmode="numeric"
+    type="text"
+    placeholder="Valor em reais"
+    :value="internal"
+    v-maska:[options]
+    pattern="R\$ [1-9]\d*"
+    required
+  />
 </template>
 <script setup lang="ts">
 import type { MaskInputOptions } from 'maska';
@@ -24,3 +32,11 @@ const mask = new Mask(options);
 const listing = useListing();
 const internal = computed(() => mask.masked(listing.value));
 </script>
+
+<style scoped lang="scss">
+input:invalid {
+  border-color: hsl(0, 60%, 50%);
+  color: hsl(0, 60%, 50%);
+  background-color: hsl(0, 100%, 85%);
+}
+</style>
