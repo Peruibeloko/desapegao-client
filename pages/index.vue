@@ -7,7 +7,7 @@
     <input type="text" v-model.trim="listing.location" placeholder="Bairro onde o produto se encontra" required />
     <input type="text" v-model.trim="listing.sellerName" placeholder="Seu nome" required />
     <PhoneInput />
-    <button class="footer-link" type="submit">Enviar Anúncio</button>
+    <button class="footer-link" type="submit" :disabled="!listing.isFormValid">Enviar Anúncio</button>
   </form>
 </template>
 
@@ -49,6 +49,21 @@ form {
   input::placeholder {
     color: #949494;
     opacity: 1;
+  }
+
+  input:invalid::placeholder {
+    color: hsl(0, 60%, 50%);
+  }
+
+  input:invalid {
+    border-color: hsl(0, 60%, 50%);
+    color: hsl(0, 60%, 50%);
+    background-color: hsl(0, 100%, 85%);
+  }
+
+  button:disabled {
+    background-color: hsl(0, 0%, 33%);
+    cursor: not-allowed;
   }
 }
 </style>
