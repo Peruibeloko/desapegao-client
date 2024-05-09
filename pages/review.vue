@@ -42,7 +42,7 @@ const handleClick = async () => {
   });
 
   if (result.status !== 200) {
-    sessionStorage.setItem('error', await result.text());
+    sessionStorage.setItem('error', JSON.stringify(await result.json()));
     return router.push('error');
   }
 
