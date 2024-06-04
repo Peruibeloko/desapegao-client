@@ -43,6 +43,8 @@ form {
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     font-size: 1.25em;
+    font-family: 'Inter';
+    letter-spacing: -0.05rem;
     width: 100%;
   }
 

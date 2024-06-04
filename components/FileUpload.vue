@@ -110,5 +110,10 @@ label > div {
   img {
     width: 200px;
   }
+
+  span {
+    font-family: 'Inter';
+    letter-spacing: -0.05rem;
+  }
 }
 </style>
