@@ -33,6 +33,8 @@ div {
   margin: 0 auto;
 
   :deep(canvas) {
+    width: auto !important;
+    height: auto !important;
     max-width: 100%;
   }
 }
