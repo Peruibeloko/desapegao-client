@@ -16,7 +16,8 @@ export const useListing = defineStore('listing', () => {
       location.value !== '' &&
       sellerName.value !== '' &&
       sellerPhone.value !== '' &&
-      sellerPhone.value.length === 11
+      sellerPhone.value.length === 11 &&
+      useImages().productPhoto !== ''
   );
 
   function init(data: Listing) {
