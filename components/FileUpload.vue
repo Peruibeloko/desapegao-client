@@ -3,7 +3,7 @@
     type="file"
     name="productPhoto"
     id="productPhoto"
-    accept="image/png, image/jpeg"
+    accept="image/png, image/jpeg, image/heif, image/heic"
     @change="handleInput"
     required
   />
@@ -40,17 +40,17 @@ const dimensions = computed(() => {
 });
 
 const setImage = (img: File) => {
+  console.log(img);
+
   const reader = new FileReader();
   reader.readAsDataURL(img);
   reader.addEventListener('load', () => {
     const result = reader.result as string;
     images.productPhoto = result;
-
-    const blob = new Blob([result], { type: 'image/png' });
   });
 };
 
-const handleInput = (e: Event) => {
+const handleInput = async (e: Event) => {
   const selectedFile = (e.target as HTMLInputElement).files?.item(0);
 
   if (!selectedFile) {
@@ -60,12 +60,28 @@ const handleInput = (e: Event) => {
 
   fileSize.value = selectedFile.size;
 
-  new Compressor(selectedFile, {
-    quality: 0.6,
-    strict: true,
-    convertSize: -Infinity,
-    success: setImage
-  });
+  const isHEIC = /^.+\.heic$/i.test(selectedFile.name);
+
+  if (!isHEIC) {
+    new Compressor(selectedFile, {
+      quality: 0.6,
+      strict: true,
+      convertSize: -Infinity,
+      success: setImage
+    });
+  } else {
+    const heic2any = (await import('heic2any')).default;
+    heic2any({ blob: selectedFile, quality: 0.6, toType: 'image/jpeg' })
+      .then(blob => (Array.isArray(blob) ? blob[0] : blob))
+      .then(data =>
+        setImage(
+          new File([data], 'converted.jpg', {
+            type: 'image/jpeg',
+            lastModified: new Date().getTime()
+          })
+        )
+      );
+  }
 };
 </script>
 
