@@ -1,10 +1,10 @@
 <template>
-  <header>
+  <!-- <header>
     <NuxtLink to="/">
       <img src="~/assets/images/Logo.png" alt="Logo do site" />
     </NuxtLink>
     <span> {{ route.meta.headerText ?? '' }} </span>
-  </header>
+  </header> -->
   <main>
     <NuxtPage />
   </main>
@@ -24,18 +24,25 @@ onMounted(() => {
   listing.init(JSON.parse(persistedData));
 });
 </script>
+
+<style>
+html, body, div#__nuxt, main {
+  height: 100%;
+}
+</style>
+
 <style lang="scss">
 header {
   display: flex;
   flex-direction: column;
 }
 
-header > a > img {
+header>a>img {
   width: 80px;
   padding: 1rem;
 }
 
-header > span {
+header>span {
   padding: 0.75rem 0;
 
   background-color: var(--color__main);
