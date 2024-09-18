@@ -1,8 +1,6 @@
 <template>
   <div>
-    <p class="paywall">Nós do time de desenvolvimento da plataforma suspendemos as operações do site até que a situação
-      financeira do projeto seja normalizada.</p>
-    <p class="paywall">Agradecemos a compreensão!</p>
+    <p class="paywall">Sistema desligado.</p>
   </div>
   <!-- <form @submit="handleSubmit">
     <FileUpload />
